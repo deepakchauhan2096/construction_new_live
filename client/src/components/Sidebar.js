@@ -27,6 +27,7 @@ const Sidebar = ({
 }) => {
   // console.log(toggle, "control");
   const navigate = useNavigate()
+  
 
 
   const Logout = async () => {
@@ -38,9 +39,6 @@ const Sidebar = ({
       console.error('Error logging out: ', error);
     }
   };
-  // const truncatedUsername =
-  // COMPANY_USERNAME.split("@")[0].slice(0, 6).charAt(0).toUpperCase() +
-  // COMPANY_USERNAME.split("@")[0].slice(1, 6);
 
   const drawerWidth = 0;
   return (
@@ -58,25 +56,26 @@ const Sidebar = ({
           variant="permanent"
           anchor="left"
           PaperProps={{
-            class: "sidebar display-sidebar-desk"
+            class: "sidebar display-sidebar-desk border"
           }}
         >
-        <div
-  className="sidebar-header d-flex p-3 f-20"
-  style={{ justifyContent: "space-between" }}
->
-  <h5 className="pt-2">{COMPANY_USERNAME}</h5>
-  <Tooltip title={COMPANY_USERNAME}>
-  <Avatar>{(COMPANY_ID)}</Avatar>
-  </Tooltip>
-</div>
+          <div
+            className="sidebar-header d-flex p-3 f-20"
+            style={{ justifyContent: "space-between" }}
+          >
+            <h5 className="pt-2">{COMPANY_USERNAME}</h5>
+            <Tooltip title={COMPANY_USERNAME}>
+              <Avatar>{(COMPANY_ID)}</Avatar>
+            </Tooltip>
+          </div>
+
           <Divider />
 
           <List>
             <Link
-              to={`/company/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
+              to={`/company/dashboard`}
               className="nav-link"
-              style={{ background: active === 0 ? "#f3f3f3" : "", zIndex:"-1 !important" }}
+              style={{ background: active === 0 ? "#f3f3f3" : "", zIndex: "-1 !important" }}
             >
               <ListItem disablePadding>
                 <ListItemButton sx={{ fontSize: "16px" }}>
@@ -85,7 +84,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/projects/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
+              to={`/company/projects`}
               className="nav-link"
               style={{ background: active == 1 ? "#f3f3f3" : "" }}
             >
@@ -96,7 +95,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/employees/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
+              to={`/company/employees`}
               className="nav-link"
               style={{ background: active == 2 ? "#f3f3f3" : "" }}
             >
@@ -107,7 +106,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/attendance/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
+              to={`/company/attendance`}
               className="nav-link"
               style={{ background: active == 3 ? "#f3f3f3" : "" }}
             >
@@ -118,7 +117,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/documents/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
+              to={`/company/documents`}
               className="nav-link"
               style={{ background: active == 4 ? "#f3f3f3" : "" }}
             >
@@ -129,7 +128,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/contractor/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
+              to={`/company/contractor`}
               className="nav-link"
               style={{ background: active == 6 ? "#f3f3f3" : "" }}
             >
@@ -156,7 +155,7 @@ const Sidebar = ({
             </div>
           </div>
           <Divider />
-         
+
         </Drawer>
 
         <Drawer
@@ -188,7 +187,7 @@ const Sidebar = ({
 
           <List>
             <Link
-              to={`/company/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
+              to={`/company`}
               className="nav-link"
               style={{ background: active == 0 ? "#f3f3f3" : "" }}
             >
@@ -199,7 +198,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/projects/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
+              to={`/company/projects`}
               className="nav-link"
               style={{ background: active == 1 ? "#f3f3f3" : "" }}
             >
@@ -210,7 +209,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/employees/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
+              to={`/company/employees`}
               className="nav-link"
               style={{ background: active == 2 ? "#f3f3f3" : "" }}
             >
@@ -221,7 +220,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/attendance/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
+              to={`/company/attendance`}
               className="nav-link"
               style={{ background: active == 3 ? "#f3f3f3" : "" }}
             >
@@ -232,7 +231,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/documents/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
+              to={`/company/documents`}
               className="nav-link"
               style={{ background: active === 4 ? "#f3f3f3" : "" }}
             >
@@ -243,7 +242,7 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/contractor/${COMPANY_ID}/${COMPANY_USERNAME}/${COMPANY_PARENT_ID}/${COMPANY_PARENT_USERNAME}`}
+              to={`/company/contractor`}
               className="nav-link"
               style={{ background: active === 6 ? "#f3f3f3" : "" }}
             >
@@ -257,10 +256,10 @@ const Sidebar = ({
           <Divider />
           <div
             className="login sidebar_footer position-absolute p-3 "
-            style={{ bottom: "0"}}
+            style={{ bottom: "0" }}
           >
             <div className="logout_icon ">
-            <button
+              <button
                 className="text-dark text-uppercase btn-link border-0 bg-lighty"
                 type="submit"
                 onClick={Logout}

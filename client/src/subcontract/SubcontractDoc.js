@@ -14,7 +14,7 @@ import { toast } from 'react-toastify';
 import CircularProgressWithLabel from "../components/Backdrop"
 
 import ExpiryReminder from '../components/ExpiryReminder';
-import CreateProjectDoc from '../company/CreateProjectDoc';
+import CreateProjectDoc from '../company/myproject/CreateProjectDoc';
 
 import CreateSubDoc from './CreateSubDoc';
 import { RotatingLines } from 'react-loader-spinner';

@@ -498,9 +498,6 @@ const EmployeeSrc = () => {
   };
 
   console.log(allempData[0].EMPLOYEE_ID, "eployeeid")
-
-  const drawerWidth = 250;
-
   console.log(filterData.row?.EMPLOYEE_ASSIGN, "filterData.row")
 
   // const filterProjects =

@@ -17,10 +17,16 @@ p,b{
   font-size: 13px;
 }
 
-/* .tableWidth{
-  width: 100% !important;
-
-} */
+.myscreen {
+  height: calc(100vh - 29px);
+  padding: 0;
+  background: #fff;
+  padding-bottom:0;
+  overflow:auto;
+  border-radius: 0;
+  Border: 0;
+  display: block;
+}
 
 .table-hover:hover{
   background: #555555;

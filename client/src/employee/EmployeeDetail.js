@@ -12,11 +12,6 @@ const EmployeeDetail = ({ state }) => {
 
   console.log(state, "state")
 
-
-
-
-
-
   const navigate = useNavigate();
   const [project, setProject] = useState();
   const [empdata, setEmpdata] = useState([]);

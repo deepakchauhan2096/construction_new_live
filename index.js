@@ -430,6 +430,16 @@ app.put("/api/update_emp_attendance", (req, res) => {
 });
 
 
+app.put("/api/get_assigned_employees", (req, res) => {
+  sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/get_assigned_employees`, req, res)
+})
+
+
+
+app.put("/api/get_assigned_projects", (req, res) => {
+  sendHttpRequest("PUT", `${process.env.SERVERAPIREQUEST}/get_assigned_projects`, req, res)
+})
+
 
 
 
