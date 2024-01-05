@@ -1,6 +1,4 @@
 import {
-  Avatar,
-  CssBaseline,
   Divider,
   Drawer,
   List,
@@ -10,12 +8,16 @@ import {
   Toolbar,
   Tooltip,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Link, useNavigate } from "react-router-dom";
+import Avatar from '@mui/material/Avatar';
+import Stack from '@mui/material/Stack';
 import { Button } from "bootstrap";
 import Navbar from "./Navbar";
 import { auth } from "../firebase";
+import axios from "axios";
+import zIndex from "@mui/material/styles/zIndex";
 
 const Sidebar = ({
   COMPANY_ID,
@@ -25,9 +27,11 @@ const Sidebar = ({
   active,
   toggle,
 }) => {
-  // console.log(toggle, "control");
-  const navigate = useNavigate()
   
+  console.log(COMPANY_ID, "control");
+  const navigate = useNavigate()
+  const [data, setData] = useState([]);
+
 
 
   const Logout = async () => {
@@ -40,7 +44,53 @@ const Sidebar = ({
     }
   };
 
+  const headers = {
+    "Content-Type": "application/json"
+  };
+
+
+  // get company
+  const getCompany = async () => {
+    try {
+      const response = await axios.put(
+        "/api/get_all_company",
+        {
+          COMPANY_PARENT_ID: COMPANY_PARENT_ID,
+          COMPANY_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
+        },
+        {
+          headers
+        }
+      );
+      // setTimeout(() => {
+      // console.log("response.data : ", response.data);
+      const data = response.data;
+      setData(data.result);
+      // }, 1000);
+    } catch (error) {
+      console.log("Error fetching data:", error);
+
+    }
+  };
+
+
+  useEffect(() => {
+    getCompany();
+  }, [COMPANY_ID]);
+
+
+
+
+
+
   const drawerWidth = 0;
+  const filterData = data?.filter(prev => prev.COMPANY_ID == COMPANY_ID)[0]
+
+  console.log(filterData, "wh")
+
+
+
+
   return (
     <>
       <div>
@@ -56,17 +106,19 @@ const Sidebar = ({
           variant="permanent"
           anchor="left"
           PaperProps={{
-            class: "sidebar display-sidebar-desk border"
+            class: "sidebar display-sidebar-desk border",
+            style : {zIndex: 25}
           }}
         >
           <div
             className="sidebar-header d-flex p-3 f-20"
             style={{ justifyContent: "space-between" }}
           >
-            <h5 className="pt-2">{COMPANY_USERNAME}</h5>
-            <Tooltip title={COMPANY_USERNAME}>
-              <Avatar>{(COMPANY_ID)}</Avatar>
+            <h5 className="pt-2">{filterData?.COMPANY_NAME.toString(0,10)}</h5>
+            <Tooltip title={COMPANY_USERNAME} sx={{zIndex:26}}>
+              <Avatar>{filterData?.COMPANY_NAME?.substring(0, 1)}</Avatar>
             </Tooltip>
+          
           </div>
 
           <Divider />
@@ -128,9 +180,9 @@ const Sidebar = ({
               </ListItem>
             </Link>
             <Link
-              to={`/company/contractor`}
+              to={`/company/contractors`}
               className="nav-link"
-              style={{ background: active == 6 ? "#f3f3f3" : "" }}
+              style={{ background: active == 5 ? "#f3f3f3" : "" }}
             >
               <ListItem disablePadding>
                 <ListItemButton sx={{ fontSize: "16px" }}>
@@ -178,16 +230,17 @@ const Sidebar = ({
             className="sidebar-header d-flex p-3 f-20"
             style={{ justifyContent: "space-between" }}
           >
-            <h5 className="pt-2">{COMPANY_USERNAME}</h5>
+            {/* <h5 className="pt-2">{COMPANY_USERNAME}</h5>
             <Tooltip title={"copany"}>
               <Avatar>{(COMPANY_USERNAME)?.slice(0, 1)}</Avatar>
-            </Tooltip>
+            </Tooltip> */}
+   
           </div>
           <Divider />
 
           <List>
             <Link
-              to={`/company`}
+              to={`/company/dashboard`}
               className="nav-link"
               style={{ background: active == 0 ? "#f3f3f3" : "" }}
             >

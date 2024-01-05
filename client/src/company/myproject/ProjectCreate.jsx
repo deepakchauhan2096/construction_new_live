@@ -147,13 +147,13 @@ export default function ProjectCreate({
 
   return (
     <>
-      <Button
+      <button
         size="small"
         variant={"outlined"}
-        className={"btn button border-bottom-0 bg-white"}
+        className={"btn button border-bottom-0 bg-white btn-sm"}
       >
         My Projects
-      </Button>
+      </button>
       <button
         onClick={handleOpen}
         sx={{ color: "#277099" }}

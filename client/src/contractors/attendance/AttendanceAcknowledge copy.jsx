@@ -17,7 +17,6 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import SalaryPDF from "../../Invoices/SalaryPDF";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
-import { DataGrid } from "@mui/x-data-grid";
 
 const AttendanceAcknowledge = ({
   COMPANY_ID,
@@ -331,150 +330,6 @@ const AttendanceAcknowledge = ({
     filename: "Doc.csv",
   };
 
-
-  const columns = [
-    {
-      field: "EMPLOYEE_ID",
-      headerName: "Employee Id",
-      width: 170,
-    },
-    { field: "EMPLOYEE_NAME", headerName: "Name", width: 200 },
-
-    // {
-    //   field: "ATTENDANCE_IN",
-    //   headerName: "In",
-    //   width: 120,
-    //   renderCell: (cellValues) => {
-    //     return cellValues?.row.ATTENDANCE_TYPE_IN == "automatic" &&
-    //       cellValues?.row.ATTENDANCE_IN ? (
-    //       <>
-    //         {cellValues?.row.ATTENDANCE_IN}
-    //       </>
-    //     ) : (
-    //       <>{"Not available"}</>
-    //     );
-    //   },
-    //   cellClassName: (cellValues) => {
-    //     return cellValues?.row.ATTENDANCE_TYPE_IN == "automatic" &&
-    //       cellValues?.row.ATTENDANCE_IN
-    //       ? "bg-success text-white border"
-    //       : "bg-white text-dark border";
-    //   },
-    // },
-
-    // {
-    //   field: "ATTENDANCE_OUT",
-    //   headerName: "Out",
-    //   width: 150,
-    //   renderCell: (cellValues) => {
-    //     return cellValues?.row.ATTENDANCE_TYPE_OUT == "automatic" &&
-    //       cellValues?.row.ATTENDANCE_OUT ? (
-    //       <>
-    //         {cellValues?.row.ATTENDANCE_OUT}
-    //       </>
-    //     ) : (
-    //       <>{"Not available"}</>
-    //     );
-    //   },
-    //   cellClassName: (cellValues) => {
-    //     return cellValues?.row.ATTENDANCE_TYPE_OUT == "automatic" &&
-    //       cellValues?.row.ATTENDANCE_OUT
-    //       ? "bg-success text-white border"
-    //       : "bg-white text-dark border";
-    //   },
-    // },
-
-    {
-      field: "TOTAL_HOURS",
-      headerName: "Working hours",
-      width: 200,
-      renderCell: (cellValues) => {
-        return (
-          <>
-            {cellValues.row.TOTAL_HOURS}
-          </>)
-      },
-      cellClassName: (cellValues) => {
-        return cellValues.row.ATTENDANCE_IN && cellValues.row.ATTENDANCE_OUT
-          ? "bg-light text-dark border"
-          : "text-white border bg-success";
-      },
-    },
-    {
-      field: "OVERTIME_HOURS",
-      headerName: "Overtime",
-      width: 200,
-      renderCell: (cellValues) => {
-        return (
-          cellValues?.row.ATTENDANCE_OUT && (
-            <>
-              {cellValues?.row.OVERTIME_HOURS}
-            </>
-          )
-        );
-      },
-    },
-    {
-      field: "Status",
-      headerName: "Acknowledgement",
-      width: 200,
-      renderCell: (cellValues) => {
-        return (<PDFDownloadLink
-          className="btn btn-info btn-sm"
-          document={
-            <SalaryPDF
-              name={cellValues.row.EMPLOYEE_NAME}
-              date={formattedMyDateCurrent}
-              startdate={startDate?._i}
-              enddate={endDate?._i}
-            />
-          }
-          fileName={`${cellValues.row.EMPLOYEE_NAME}.pdf`}
-        >
-          Download
-        </PDFDownloadLink>)
-      }
-    },
-    {
-      type: "number",
-      field: "Location",
-      headerName: "Punch Detail",
-      width: 200,
-      renderCell: (cellValues) => {
-        return (
-          <button
-            className="btn btn-secondary btn-sm"
-            onClick={(e) =>
-              PunchReport({
-                a: cellValues.row.PUNCH,
-                b: cellValues.row.EMPLOYEE_ATTENDANCE,
-              })
-            }
-          >
-            Punch Detail
-          </button>);
-      },
-    },
-  ];
-
-
-  const newdata = processedData?.map((post) => {
-    const [hours, minutes] = post?.TOTAL_HOURS.match(
-      /\d+/g
-    );
-    const totalMinutes = parseInt(hours) * 60 + parseInt(minutes)
-    const data = totalMinutes > 0 ? post : null
-    return data;
-  })
-
-  const newdata2 = newdata?.filter(prev => prev !== null)
-
-  const enployeeName = employees?.filter((e) => e._doc.EMPLOYEE_ROLE != "")
-  
-  // console.log(enployeeName, "enployeeName")
-
-
-
   return (
     <>
       <Sidebar
@@ -490,7 +345,7 @@ const AttendanceAcknowledge = ({
           <Navbar toggle={() => setOpenNav((e) => !e)} />
           {resStatus == true ? (<button
             size="small"
-            // variant={show ? "outlined" : "outlined"}
+            variant={show ? "outlined" : "outlined"}
             className={
               show
                 ? "btn button border-bottom-0 bg-white btn-sm"
@@ -515,9 +370,12 @@ const AttendanceAcknowledge = ({
             <button
               size="small"
               className="btn button border-bottom-0 bg-white btn-sm"
-              // variant="outlined"
+              variant="outlined"
             >
-              Punch Detail - {employeeName._doc.EMPLOYEE_NAME}{" "}<i onClick={() => setshow(true)} className="fa fa-times" aria-hidden="true"></i>
+              Punch Detail - {employeeName._doc.EMPLOYEE_NAME}{" "}
+              <Typography size="small" px={1} onClick={() => setshow(true)}>
+                <i className="fa fa-times" aria-hidden="true"></i>
+              </Typography>
             </button>
           )}
           {resStatus == true ? (
@@ -673,9 +531,9 @@ const AttendanceAcknowledge = ({
                                   value={name}
                                 >
                                   <option selected>All</option>
-                                  {enployeeName?.map((e) => (
+                                  {employees?.map((e) => (
                                     <option>
-                                      {e._doc.EMPLOYEE_ROLE}
+                                      {new Set(e._doc.EMPLOYEE_ROLE)}
                                     </option>
                                   ))}
                                 </select>
@@ -686,88 +544,109 @@ const AttendanceAcknowledge = ({
                       </div>
                       <div className="container">
                         <div className="row">
-                          <div className="col-xl-12 col-lg-6 overflow-auto pt-2">
-                            {resStatus == true ? (
-                              <DataGrid
-                                className="display"
-                                style={{ height: "78vh" }}
-                                rows={newdata2}
-                                columns={columns}
-                                getRowId={(row) => row.EMPLOYEE_ID}
-                                initialState={{
-                                  pagination: {
-                                    paginationModel: {
-                                      pageSize: 8,
-                                    },
-                                  },
-                                  sorting: {
-                                    sortModel: [
-                                      {
-                                        field: "ATTENDANCE_DATE_ID",
-                                        sort: "asc",
-                                      },
-                                    ],
-                                  },
+                          <div className="col-xl-12 col-lg-6 overflow-auto">
+                            <table className="table table-hover table-sm table-fixed table-responsive">
+                              <thead>
+                                <tr className="table-light">
+                                  <th scope="col" colSpan={7} style={{ gap: 2 }}>
+                                    <button className="btn btn-sm" disabled>
+                                      No of Employee: {processedData?.length}
+                                    </button>{" "}
+                                  </th>
+                                </tr>
+                                <tr className="table-light">
+                                  <th scope="col">Employee Id</th>
+                                  <th scope="col">Employee</th>
+                                  <th scope="col">Total</th>
+                                  <th scope="col">Regular</th>
+                                  <th scope="col">Overtime</th>
+                                  <th scope="col">Acknowledge</th>
+                                  <th scope="col">Action</th>
+                                </tr>
+                              </thead>
 
-                                  aggregation: {
-                                    model: {
-                                      size: "sum",
-                                      updatedAt: "max",
-                                    },
-                                  },
-                                }}
-                                density="compact"
-                                pageSizeOptions={[5]}
-                                // checkboxSelection
-                                disableRowSelectionOnClick
-                                localeText={{
-                                  noRowsLabel: newdata2.length == 0 && "No attendance available for this week choose different week",
-                                }}
-                              />
-                            ) : resStatus === "error" ? (
-                              <div
-                                style={{
-                                  position: "absolute",
-                                  top: "50%",
-                                  left: "50%",
-                                  transform: "translate(-50%,-50%)",
-                                }}
-                              >
-                                <small className="text-dark">
-                                  <p>Check your connection and try again. :(</p>
-                                  <center>
-                                    <button
-                                      onClick={Reports}
-                                      className="btn btn-sm btn-secondary"
-                                    >
-                                      Retry
-                                    </button>
-                                  </center>
-                                </small>
-                              </div>
-                            ) : (
-                              <div
-                                style={{
-                                  position: "absolute",
-                                  top: "50%",
-                                  left: "50%",
-                                  transform: "translate(-50%,-50%)",
-                                }}
-                              >
-                                <RotatingLines
-                                  strokeColor="#2D5169"
-                                  strokeWidth="5"
-                                  animationDuration="0.75"
-                                  width="50"
-                                  visible={true}
-                                />
-                              </div>
-                            )}
+                              <tbody>
+                                {processedData?.map((post) => {
+                                  // Extract hours and minutes from post.TOTAL_HOURS
+                                  const [hours, minutes] = post.TOTAL_HOURS.match(
+                                    /\d+/g
+                                  ) || [0, 0];
+                                  const totalMinutes =
+                                    parseInt(hours) * 60 + parseInt(minutes);
+
+                                  // Check if totalMinutes is greater than zero before rendering the row
+                                  if (totalMinutes > 0) {
+                                    return (
+                                      <tr
+                                        key={post.EMPLOYEE_ID}
+                                        className="table table-striped"
+                                      >
+                                        <td>{post.EMPLOYEE_ID}</td>
+                                        <td>{post.EMPLOYEE_NAME}</td>
+                                        <td>
+                                          <span
+                                            className="rounded-2 px-1 text-light"
+                                            style={{
+                                              width: "content-fit",
+                                              backgroundColor: "#12AD2B",
+                                            }}
+                                          >
+                                            {post.TOTAL_HOURS}
+                                          </span>
+                                        </td>
+                                        <td>
+                                          <span
+                                            className="rounded-2 px-1 text-light"
+                                            style={{
+                                              width: "content-fit",
+                                              backgroundColor: "#12AD2B",
+                                            }}
+                                          >
+                                            {post.TOTAL_HOURS}
+                                          </span>
+                                        </td>
+                                        <td>{post.OVERTIME_HOURS}</td>
+                                        <td>
+                                          <PDFDownloadLink
+                                            className="btn btn-info btn-sm"
+                                            document={
+                                              <SalaryPDF
+                                                name={post.EMPLOYEE_NAME}
+                                                date={formattedMyDateCurrent}
+                                                startdate={startDate?._i}
+                                                enddate={endDate?._i}
+                                              />
+                                            }
+                                            fileName={`${post.EMPLOYEE_NAME}.pdf`}
+                                          >
+                                            Download
+                                          </PDFDownloadLink>
+                                        </td>
+                                        <td>
+                                          <button
+                                            className="btn btn-secondary btn-sm"
+                                            onClick={(e) =>
+                                              PunchReport({
+                                                a: post.PUNCH,
+                                                b: post.EMPLOYEE_ATTENDANCE,
+                                              })
+                                            }
+                                          >
+                                            Punch Detail
+                                          </button>
+                                        </td>
+                                      </tr>
+                                    );
+                                  } else {
+                                    return null;
+                                  }
+                                })}
+                              </tbody>
+                            </table>
                           </div>
                         </div>
                       </div>
                     </>
-
                   )
                 ) : (
                   showDetail

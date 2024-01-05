@@ -4,13 +4,14 @@ import { Box, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import EmployeeEdit from "./EmployeeEdit";
-import EmployeeCreate from "./EmployeeCreate";
+import EmployeeEdit from "../myemployee/EmployeeEdit";
+// import EmployeeCreate from "../myemployee/EmployeeCreate";
 import Sidebar from "../../components/Sidebar";
 import moment from "moment";
 import { RotatingLines } from "react-loader-spinner";
+import CreateContractor from "./CreateContractor";
 
-const Employee = ({
+const Contractor = ({
   COMPANY_ID,
   COMPANY_USERNAME,
   COMPANY_PARENT_ID,
@@ -24,15 +25,21 @@ const Employee = ({
   const [resStatus, setResStatus] = useState(false);
   const navigate = useNavigate();
 
+
+  const headers = {
+    "Content-Type": "application/json",
+    authorization_key: "qzOUsBmZFgMDlwGtrgYypxUz",
+  };
+
   //fatch Employees
   const fetchData = async () => {
     try {
-      const response = await axios.put("/api/get_employee", {
-        EMPLOYEE_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
-        EMPLOYEE_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
-        EMPLOYEE_PARENT_USERNAME: COMPANY_USERNAME,
-        EMPLOYEE_PARENT_ID: COMPANY_ID,
-      });
+      const response = await axios.put("/api/get_subcontractor", {
+        SUBCONTRACTOR_MEMBER_PARENT_ID: COMPANY_PARENT_ID,
+        SUBCONTRACTOR_MEMBER_PARENT_USERNAME: COMPANY_PARENT_USERNAME,
+        SUBCONTRACTOR_PARENT_USERNAME: COMPANY_USERNAME,
+        SUBCONTRACTOR_PARENT_ID: COMPANY_ID,
+      },{headers});
 
       const data = response.data;
       // console.log("Employee Data: =>", data);
@@ -53,12 +60,12 @@ const Employee = ({
   const archiveEmployee = async (archiveData) => {
     try {
       const data = {
-        EMPLOYEE_PARENT_ID: archiveData.row?.EMPLOYEE_PARENT_ID,
-        EMPLOYEE_PARENT_USERNAME: archiveData.row?.EMPLOYEE_PARENT_USERNAME,
-        EMPLOYEE_MEMBER_PARENT_ID: archiveData.row?.EMPLOYEE_MEMBER_PARENT_ID,
-        EMPLOYEE_MEMBER_PARENT_USERNAME:
-          archiveData.row?.EMPLOYEE_MEMBER_PARENT_USERNAME,
-        EMPLOYEE_ID: archiveData.row?.EMPLOYEE_ID,
+        SUBCONTRACTOR_PARENT_ID: archiveData.row?.SUBCONTRACTOR_PARENT_ID,
+        SUBCONTRACTOR_PARENT_USERNAME: archiveData.row?.SUBCONTRACTOR_PARENT_USERNAME,
+        SUBCONTRACTOR_MEMBER_PARENT_ID: archiveData.row?.SUBCONTRACTOR_MEMBER_PARENT_ID,
+        SUBCONTRACTOR_MEMBER_PARENT_USERNAME:
+          archiveData.row?.SUBCONTRACTOR_MEMBER_PARENT_USERNAME,
+        SUBCONTRACTOR_ID: archiveData.row?.SUBCONTRACTOR_ID,
       };
 
       console.log("Data:", data);
@@ -86,12 +93,12 @@ const Employee = ({
   const unarchiveEmployee = async (archiveemp) => {
     try {
       const data = {
-        EMPLOYEE_PARENT_ID: archiveemp.row?.EMPLOYEE_PARENT_ID,
-        EMPLOYEE_PARENT_USERNAME: archiveemp.row?.EMPLOYEE_PARENT_USERNAME,
-        EMPLOYEE_MEMBER_PARENT_ID: archiveemp.row?.EMPLOYEE_MEMBER_PARENT_ID,
-        EMPLOYEE_MEMBER_PARENT_USERNAME:
-          archiveemp.row?.EMPLOYEE_MEMBER_PARENT_USERNAME,
-        EMPLOYEE_ID: archiveemp.row?.EMPLOYEE_ID,
+        SUBCONTRACTOR_PARENT_ID: archiveemp.row?.SUBCONTRACTOR_PARENT_ID,
+        SUBCONTRACTOR_PARENT_USERNAME: archiveemp.row?.SUBCONTRACTOR_PARENT_USERNAME,
+        SUBCONTRACTOR_MEMBER_PARENT_ID: archiveemp.row?.SUBCONTRACTOR_MEMBER_PARENT_ID,
+        SUBCONTRACTOR_MEMBER_PARENT_USERNAME:
+          archiveemp.row?.SUBCONTRACTOR_MEMBER_PARENT_USERNAME,
+        SUBCONTRACTOR_ID: archiveemp.row?.SUBCONTRACTOR_ID,
       };
 
       console.log("Data:", data);
@@ -120,7 +127,7 @@ const Employee = ({
   console.log(data, "data");
 
   const handleClick = (event) => {
-    navigate("/company/employees/detail", {
+    navigate("/company/contractors/detail", {
       state: [
         event.row,
         COMPANY_ID,
@@ -136,123 +143,119 @@ const Employee = ({
 
 // attendance status
 
-  const columns = [
-    { field: "EMPLOYEE_ID", headerName: "ID", width: 60 },
-    {
-      field: "EMPLOYEE_USERNAME",
-      headerName: "Employee Email",
-      width: 120,
-    },
-    {
-      field: "EMPLOYEE_NAME",
-      headerName: "Name",
-      width: 120,
-    },
+const columns = [
+  { field: "SUBCONTRACTOR_ID", headerName: "ID", width: 90 },
+  {
+    field: "SUBCONTRACTOR_USERNAME",
+    headerName: "Contractor Email",
+    width: 150,
+  },
+  {
+    field: "SUBCONTRACTOR_NAME",
+    headerName: "Name",
+    width: 150,
+  },
+  {
+    field: "SUBCONTRACTOR_PHONE",
+    headerName: "Phone",
+    width: 150,
+  },
+  {
+    field: "SUBCONTRACTOR_START_DATE",
+    headerName: "Start Date",
+    width: 150,
+  },
+  {
+    field: "SUBCONTRACTOR_END_DATE",
+    headerName: "End Date",
+    type: "number",
+    width: 100,
+  },
 
-    {
-      field: "EMPLOYEE_ROLE",
-      headerName: "Employee Role",
-      width: 120,
+  {
+    field: "SUBCONTRACTOR_SUPERVISOR",
+    headerName: "Supervisor",
+    width: 120,
+  },
+  {
+    field: "action",
+    headerName: "Action",
+    width: 80,
+    renderCell: (cellValues) => {
+      return (
+        <Button
+          variant="contained"
+          className="view-btn btn btn-success"
+          style={{ padding: "2px 2px" }}
+          onClick={(event) => {
+            handleClick(cellValues);
+          }}
+        >
+          view
+        </Button>
+      );
     },
-    {
-      field: "EMPLOYEE_PHONE",
-      headerName: "Phone",
-      width: 110,
+  },
+  {
+    field: "edit",
+    headerName: "Edit",
+    width: 80,
+    renderCell: (cellValues) => {
+      return <EmployeeEdit edit={cellValues} refetch={fetchData} />;
     },
-    {
-      field: "EMPLOYEE_HIRE_DATE",
-      headerName: "Hire Date",
-      width: 100,
+  },
+  {
+    field: "archive",
+    headerName: "Archive",
+    width: 120,
+    renderCell: (cellValues) => {
+      return (
+        <>
+          {display === "unarchive" ? (
+            <Button
+              variant="contained"
+              color="secondary"
+              sx={{ borderRadius: "12px", padding: "2px 10px" }}
+              size="small"
+              onClick={() => archiveEmployee(cellValues)}
+            >
+              Archive
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              color="secondary"
+              sx={{ borderRadius: "12px", padding: "2px 10px" }}
+              size="small"
+              onClick={() => unarchiveEmployee(cellValues)}
+            >
+              UnArchive
+            </Button>
+          )}
+        </>
+      );
     },
-    {
-      field: "EMPLOYEE_HOURLY_WAGE",
-      headerName: "Hourly Wages",
-      width: 110,
-    },
+  }
 
-    {
-      field: "EMPLOYEE_EMPLMNTTYPE",
-      headerName: "Employement Type",
-      width: 120,
-    },
-    {
-      field: "action",
-      headerName: "Action",
-      width: 80,
-      renderCell: (cellValues) => {
-        return (
-          <Button
-            variant="contained"
-            className="view-btn btn btn-success"
-            style={{ padding: "2px 2px" }}
-            onClick={(event) => {
-              handleClick(cellValues);
-            }}
-          >
-            view
-          </Button>
-        );
-      },
-    },
-    {
-      field: "edit",
-      headerName: "Edit",
-      width: 80,
-      renderCell: (cellValues) => {
-        return <EmployeeEdit edit={cellValues} refetch={fetchData} />;
-      },
-    },
-    {
-      field: "archive",
-      headerName: "Archive",
-      width: 120,
-      renderCell: (cellValues) => {
-        return (
-          <>
-            {display === "unarchive" ? (
-              <Button
-                variant="contained"
-                color="secondary"
-                sx={{ borderRadius: "12px", padding: "2px 10px" }}
-                size="small"
-                onClick={() => archiveEmployee(cellValues)}
-              >
-                Archive
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                color="secondary"
-                sx={{ borderRadius: "12px", padding: "2px 10px" }}
-                size="small"
-                onClick={() => unarchiveEmployee(cellValues)}
-              >
-                UnArchive
-              </Button>
-            )}
-          </>
-        );
-      },
-    }
-  ];
+];
 
-  const FilterArchive = empData?.filter(
-    (newData) => newData?.ARCHIVED === false
-  );
-  const rows = FilterArchive;
-  const archivedData = empData?.filter((newData) => newData?.ARCHIVED === true);
-  const rows2 = archivedData;
+  // const FilterArchive = empData?.filter(
+  //   (newData) => newData?.ARCHIVED === false
+  // );
+  // const rows = FilterArchive;
+  // const archivedData = empData?.filter((newData) => newData?.ARCHIVED === true);
+  // const rows2 = archivedData;
 
-  const filterData = data?.row;
+  const rows = empData;
 
   return (
     <>
       <Sidebar
-        active={2}
+        active={5}
         COMPANY_ID={COMPANY_ID}
         COMPANY_USERNAME={COMPANY_USERNAME}
         COMPANY_PARENT_ID={COMPANY_PARENT_ID}
-        COMPANY_PARENT_USERNAME
+        COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
       />
       <Box className="box" style={{ background: "#277099" }}>
         {/* <Navbar toggle={() => setOpenNav((e) => !e)} name={COMPANY_USERNAME} /> */}
@@ -265,7 +268,7 @@ const Employee = ({
           }
           onClick={() => setDisplay("unarchive")}
         >
-          My Employees
+          My Contractors
         </button>
 
         <button
@@ -280,7 +283,7 @@ const Employee = ({
         >
           Archive
         </button>
-        <EmployeeCreate
+        <CreateContractor
           COMPANY_ID={COMPANY_ID}
           COMPANY_USERNAME={COMPANY_USERNAME}
           COMPANY_PARENT_ID={COMPANY_PARENT_ID}
@@ -309,7 +312,7 @@ const Employee = ({
           size="small"
           disabled
         >
-            + Add New Employee
+            + Add Contractor
         </button>
       </>} 
 
@@ -319,9 +322,10 @@ const Employee = ({
             {resStatus == true ? ( <DataGrid
                 className="display"
                 sx={{ border: "none" }}
-                rows={display === "archive" ? rows2 : rows}
+                // rows={display === "archive" ? rows2 : rows}
+                rows={rows}
                 columns={columns}
-                getRowId={(row) => row.EMPLOYEE_ID}
+                getRowId={(row) => row.SUBCONTRACTOR_ID}
                 initialState={{
                   pagination: {
                     paginationModel: {
@@ -390,4 +394,4 @@ const Employee = ({
   );
 };
 
-export default Employee;
+export default Contractor;

@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword } from "firebase/auth";
-
 import InputControl from "../components/InputControl";
 import { auth } from "../firebase";
-
 import styles from "../assests/css/Login.module.css";
 import { Alert, Stack } from "@mui/material";
+import { useDispatch } from "react-redux";
+import {setCompanyuser} from "../redux/slices/CompanyLoginSlice"
 
 function Logincomp({ message }) {
+  //redux 
+  const Dispatch = useDispatch()
+
+
   const navigate = useNavigate();
   const [values, setValues] = useState({
     email: "",
@@ -45,6 +49,7 @@ function Logincomp({ message }) {
         const param = data.split("&&");
         console.log(param[4]);
         if (param[4] === "company") {
+          Dispatch(setCompanyuser(param))
           navigate(`/company/dashboard`);
         } else {
           navigate("/");

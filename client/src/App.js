@@ -15,7 +15,7 @@ import AdminDashboard from "./Admin/AdminDashboard";
 import EmployeeAttendance from "./employee/EmployeeAttendance";
 import EmployeeLogin from "./auth/EmployeeLogin";
 import EmployeeHistory from "./employee/EmployeeHistory";
-import CompanyDashboard from "./company/dashboard/Dashboard";
+// import CompanyDashboard from "./company/dashboard/Dashboard";
 import ProjectHome from "./company/myproject/ProjectAllocate";
 import EmployeeSrc from "./employee/EmployeeSrc";
 import AttendanceReport from "./company/attendance/AttendanceAcknowledge";
@@ -43,6 +43,9 @@ import EmployeeManual from "./company/myemployee/EmployeeManual";
 import EmployeeDocuments from "./company/myemployee/EmployeeDocuments";
 import AttendanceAcknowledge from "./company/attendance/AttendanceAcknowledge";
 import Documents from "./company/document/Documents";
+import Contractor from "./company/mycontractor/Contractor";
+import ContractorDetail from "./company/mycontractor/ContractorDetail";
+import Dashboard from "./contractors/dashboard/Dashboard";
 
 function App() {
   const [userName, setUserName] = useState("");
@@ -84,10 +87,10 @@ function App() {
             <Route path="/employee/history" element={<EmployeeHistory />} />
             <Route path="/myadmin" element={<AdminDashboard />} />
             <Route path="/test" element={<Updates />} />
-            <Route
+            {/* <Route
               path="/company/dashboard"
               element={<CompanyDashboard data={userName} />}
-            />
+            /> */}
             <Route
               path="/employee/:COMPANY_ID/:COMPANY_USERNAME/:COMPANY_PARENT_ID/:COMPANY_PARENT_USERNAME"
               element={<EmployeeDetail state={userName} />}
@@ -104,6 +107,20 @@ function App() {
               path="/employee/attendance/:latt/:lngi/:areas/:loca/:employees/:projects/:projectids"
               element={<EmployeeAttendance state={userName} />}
             />
+
+            {/* compnay dashboard */}
+            <Route
+              path="/company/dashboard/"
+              element={
+                <Dashboard
+                  COMPANY_ID={COMPANY_ID}
+                  COMPANY_USERNAME={COMPANY_USERNAME}
+                  COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+                  COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
+                />
+              }
+            />
+            {/* company dashboard */}
 
             {/* project */}
             <Route
@@ -144,35 +161,6 @@ function App() {
                 />
               }
             />
-            {/* My employees */}
-
-            {/* attendance */}
-            <Route
-              path="/company/attendance"
-              element={
-                <AttendanceAcknowledge 
-                  COMPANY_ID={COMPANY_ID}
-                  COMPANY_USERNAME={COMPANY_USERNAME}
-                  COMPANY_PARENT_ID={COMPANY_PARENT_ID}
-                  COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
-                />
-              }
-            />
-            {/* attendance */}
-
-            {/* document company */}
-            <Route
-              path="/company/documents"
-              element={
-                <Documents 
-                  COMPANY_ID={COMPANY_ID}
-                  COMPANY_USERNAME={COMPANY_USERNAME}
-                  COMPANY_PARENT_ID={COMPANY_PARENT_ID}
-                  COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
-                />
-              }
-            />
-            {/* document company */}
 
             <Route
               path="/company/employees/detail"
@@ -190,6 +178,60 @@ function App() {
               path="/company/employees/documents"
               element={<EmployeeDocuments />}
             />
+            {/* My employees */}
+
+            {/* attendance */}
+            <Route
+              path="/company/attendance"
+              element={
+                <AttendanceAcknowledge
+                  COMPANY_ID={COMPANY_ID}
+                  COMPANY_USERNAME={COMPANY_USERNAME}
+                  COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+                  COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
+                />
+              }
+            />
+            {/* attendance */}
+
+            {/* document company */}
+            <Route
+              path="/company/documents"
+              element={
+                <Documents
+                  COMPANY_ID={COMPANY_ID}
+                  COMPANY_USERNAME={COMPANY_USERNAME}
+                  COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+                  COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
+                />
+              }
+            />
+            {/* document company */}
+
+
+            {/* My contractors */}
+            <Route
+              path="/company/contractors"
+              element={
+                <Contractor
+                  COMPANY_ID={COMPANY_ID}
+                  COMPANY_USERNAME={COMPANY_USERNAME}
+                  COMPANY_PARENT_ID={COMPANY_PARENT_ID}
+                  COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
+                />
+              }
+            />
+            <Route
+              path="/company/contractors/detail"
+              element={<ContractorDetail />}
+            />
+            {/* My contractos */}
+
+
+
+
+
+
 
             <Route
               path="/company/employees/:COMPANY_ID/:COMPANY_USERNAME/:COMPANY_PARENT_ID/:COMPANY_PARENT_USERNAME"

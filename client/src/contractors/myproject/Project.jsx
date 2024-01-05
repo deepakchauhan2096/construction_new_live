@@ -169,21 +169,38 @@ const Project = ({
         COMPANY_PARENT_USERNAME
       />
 
-      {resStatus == true ? (<Box className="box" style={{ background: "#277099" }}>
+      <Box className="box" style={{ background: "#277099" }}>
         {/* <Navbar toggle={() => setOpenNav((e) => !e)} name={COMPANY_USERNAME} /> */}
-        <ProjectCreate
+        {resStatus == true ? (<ProjectCreate
           COMPANY_ID={COMPANY_ID}
           COMPANY_USERNAME={COMPANY_USERNAME}
           COMPANY_PARENT_ID={COMPANY_PARENT_ID}
           COMPANY_PARENT_USERNAME={COMPANY_PARENT_USERNAME}
           name={"Project"}
           Update={fetchProjects}
-        />
+        />) : <>
+          <button
+            size="small"
+            disabled
+            className={"btn button border-bottom-0 bg-white btn-sm"}
+          >
+            My Projects
+          </button>
+          <button
+
+            style={{ color: "#277099" }}
+            className="btn rounded-0 border-0  rounded-0 text-light btn-primary btn-sm"
+            size="small"
+            disabled
+          >
+            + Add New Project
+          </button>
+        </>}
 
         <div className="myscreen p-3">
           <Box style={{ height: "100%", padding: 0, paddingBottom: "0" }}>
             <>
-              <DataGrid
+              {resStatus == true ? (<DataGrid
                 sx={{ border: "none" }}
                 rows={rows}
                 columns={columns}
@@ -199,56 +216,56 @@ const Project = ({
                 pageSizeOptions={[5]}
                 checkboxSelection={false}
                 disableRowSelectionOnClick
-              />
+              />) : resStatus === "error" ? (
+                <Box>
+                  <div
+                    className="p-3"
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%,-50%)",
+                    }}
+                  >
+                    <small className="text-dark">
+                      <p>Check your connection and try again. :(</p>
+                      <center>
+                        <button
+                          onClick={fetchProjects}
+                          className="btn btn-sm btn-secondary"
+                        >
+                          Retry
+                        </button>
+                      </center>
+                    </small>
+                  </div>
+                </Box>
+              ) : (
+                <Box>
+                  <div
+                    className="p-3"
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%,-50%)",
+                    }}
+                  >
+                    <RotatingLines
+                      strokeColor="#2D5169"
+                      strokeWidth="5"
+                      animationDuration="0.75"
+                      width="50"
+                      visible={true}
+
+                    />
+                  </div>
+                </Box>
+              )}
             </>
           </Box>
         </div>
-      </Box>) : resStatus === "error" ? (
-        <Box className="box">
-          <div
-            className="p-3"
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%,-50%)",
-            }}
-          >
-            <small className="text-dark">
-              <p>Check your connection and try again. :(</p>
-              <center>
-                <button
-                  onClick={fetchProjects}
-                  className="btn btn-sm btn-secondary"
-                >
-                  Retry
-                </button>
-              </center>
-            </small>
-          </div>
-        </Box>
-      ) : (
-        <Box className="box">
-          <div
-            className="p-3"
-            style={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%,-50%)",
-            }}
-          >
-            <RotatingLines
-              strokeColor="#2D5169"
-              strokeWidth="5"
-              animationDuration="0.75"
-              width="50"
-              visible={true}
-
-            />
-          </div>
-        </Box>
-      )}
+      </Box>
     </>
   );
 };
